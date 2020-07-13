@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    tools:context=".RepairerSeparateProblem">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_weight="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/repairerProblemShopName"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/shop_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:layout_weight="1.4"
+                    android:background="@drawable/edit"
+                    android:gravity="center"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/repairerProblemMachineName"
+                android:textColor="@color/text"
+                android:textSize="18sp"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/equipment_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:layout_weight="1.4"
+                android:background="@drawable/edit"
+                android:gravity="center"
+                android:textColor="@color/text"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/repairerProblemPointNumber"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/point_no"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:layout_weight="1.4"
+                    android:background="@drawable/edit"
+                    android:gravity="center"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/repairerProblemSubpointNumber"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/subpoint_no"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:layout_weight="1.4"
+                    android:background="@drawable/edit"
+                    android:gravity="center"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/repairerProblemEmployeeName"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/employee_login"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:layout_weight="1.4"
+                    android:background="@drawable/edit"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/repairerProblemTime"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:layout_weight="1.4"
+                    android:textStyle="bold"
+                    android:background="@drawable/edit"
+                    android:gravity="center"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/problemPic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8sp"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/aps_icon"
+                android:background="@color/borders"
+                android:padding="1dp"
+                android:contentDescription="@string/cameraViewDescription" />
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:id="@+id/call_operator"
+                android:textColor="@color/text"
+                android:text="@string/call_operator"
+                android:background="@drawable/edit_red_accent"
+                android:paddingEnd="10dp"
+                android:textStyle="bold"
+                android:drawableEnd="@drawable/call_operator"/>
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_red_accent"
+                android:id="@+id/problemSolved"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:textColor="@color/text"
+                android:textStyle="bold"
+                android:text="@string/problem_solved"
+                android:drawableEnd="@drawable/ic_check_box_black_24dp"
+                android:paddingEnd="10dp"
+                tools:ignore="RtlSymmetry" />
+
+        </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_gravity="center"
+    android:padding="10dp"
+    android:background="@drawable/edit_white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="17sp"
+        android:text="@string/problematicStationDialog"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/text"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+    <Spinner
+        android:id="@+id/spinner_points"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="30dp"
+        android:padding="5dp"
+        android:background="@drawable/spinner_background"/>
+
+<!--    android:background="@drawable/spinner_background"-->
+<!--    android:backgroundTint="@drawable/edit"-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="2"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/text"
+            android:textStyle="bold"
+            android:drawableStart="@drawable/decline_button"
+            android:padding="10dp"
+            android:background="@drawable/red_rectangle"
+            android:text="@string/cancelButton" />
+
+        <Button
+            android:layout_marginLeft="15dp"
+            android:id="@+id/confirm"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/green_rectangle"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:drawableStart="@drawable/accept_button"
+            android:textColor="@color/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/acceptButton" />
+    </LinearLayout>
+</LinearLayout>

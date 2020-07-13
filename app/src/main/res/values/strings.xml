@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">APS Радиаторный завод</string>
+    <string name="login_button">Войти в систему</string>
+    <string name="tip">Введите данные</string>
+    <string name="loading">Подождите пока загрузятся\nданные с базы данных</string>
+    <string name="access_code">Пароль</string>
+    <string name="repair_button">Ремонт</string>
+    <string name="quality_button">ОТК</string>
+    <string name="raw_button">сырье</string>
+    <string name="master_button">Мастер</string>
+    <string name="open_factory_cond_button">Мониторинг\nзавода</string>
+    <string name="choose_pult_login">Выбрать пульт</string>
+
+    <string name="about_title">Подтверждение личности</string>
+    <string name="welcome_text">Добро пожаловать в приложение QuestAPS,
+        \nсозданное Akfa Research and Development.
+        \nДанное приложение облегчает и оптимизирует процесс
+        \nпроверки параметров производственных линий.
+        \nНиже выберите ваш цех, линию, на которой вы хотите провести проверку.</string>
+
+    <string name="shop">Цех: </string>
+    <string name="equipmentLine">Линия: </string>
+    <string name="numberOfProblems">Обнаружено проблем: </string>
+    <string name="checkingDuration">Время проверки: </string>
+    <string name="equipment_name_textview">Название линии:</string>
+    <string name="nomer_point_textview">"Пункт "</string>
+    <string name="next_point_button_text">Следующий пункт</string>
+    <string name="qr_text_below_scanner">Поднесите камеру к QR коду</string>
+    <string name="capture_image">Сфоткать проблему</string>
+    <string name="access_login">Логин</string>
+    <string name="separate_problem_title">Решение проблемы</string>
+    <string name="problem_description_text_filler">Здесь инфа про проблему\n\nНомер пункта, \n\nНазвание оборудования\n\nНазвание цеха</string>
+    <string name="take_pic">Сфотографировать решенную проблему</string>
+    <string name="problem_solved">Проблема решена</string>
+    <string name="call_operator">Вызвать оператора</string>
+    <string name="cameraViewDescription">cameraView</string>
+    <string name="reviseDone">Проверка окончена</string>
+    <string name="nextSteps">Дальнейшие действия</string>
+    <string name="newRevision">Новая проверка</string>
+    <string name="exitApp">Закрыть приложение</string>
+    <string name="apsTitle">AKFA PRODUCTION SYSTEM</string>
+    <string name="r_and_dTitle"><![CDATA[R&D Department]]></string>
+    <string name="logo">Logo</string>
+    <string name="remoteButtonRed">Ремонт</string>
+    <string name="remoteButtonYellow">OTK</string>
+    <string name="remoteButtonGreen">Сырьё</string>
+    <string name="remoteButtonBlue">МАСТЕР</string>
+    <string name="problemsListTitle">Список проблем на линиях</string>
+    <string name="open">Открыть</string>
+    <string name="close">Закрыть</string>
+    <string name="qr_scanner_text_top">Подойдите к начальному пункту выбранной линии</string>
+    <string name="about_app_submenu">О приложении</string>
+    <string name="log_out_submenu">Выйти</string>
+    <string name="check_equipment_submenu">Проверка линии</string>
+    <string name="pult_submenu">Пульт</string>
+    <string name="calls_submenu">Вызовы</string>
+    <string name="web_monitoring_submenu">Мониторинг завода</string>
+    <string name="problems_list_submenu">Проблемы ТО</string>
+    <string name="endOfChecking">Проверка линии закончена</string>
+    <string name="remember_me">Запомнить меня</string>
+    <string name="start_check">Начать проверку линии</string>
+    <string name="description_layout">layout</string>
+    <string name="package_name">com.akfagroup.radiatorfactoryaps</string>
+    <string name="scan_qr">Сканировать QR Код</string>
+    <string name="repairerProblemShopName">Цех:</string>
+    <string name="repairerProblemMachineName">Линия:</string>
+    <string name="repairerProblemPointNumber">Пункт №:</string>
+    <string name="repairerProblemSubpointNumber">Подпункт №:</string>
+    <string name="repairerProblemEmployeeName">Обнаружено сотрудником:</string>
+    <string name="repairerProblemTime">Время обнаружения:</string>
+    <string name="problematicStationDialog">Выберите пункт на котором появилась проблема</string>
+    <string name="cancelButton">Отмена</string>
+    <string name="acceptButton">ОК</string>
+    <string name="dialog_qr_code_instruction">Дождитесь прихода специалиста. Вы сможете изменить состояние кнопки после того, как специалист отсканирует ваш QR код.</string>
+    <string name="back_button">Назад</string>
+    <string name="urgentProblemsButton">Сканировать QR код</string>
+    <string name="urgent_problems_submenu">Срочные проблемы</string>
+    <string name="website_address_factory_condition">https://radiator-factory-aps.web.app/</string>
+    <string name="make_a_call_submenu">Вызвать сотрудника</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="who_is_called_position">Вызываемый специалист:</string>
+    <string name="about_app">Приложение разработано в 2020 году в Akfa Research and Development Department</string>
+    <string name="today_checks_submenu">Сегодняшние проверки ТО</string>
+    <string name="checks_history_submenu">История проверок ТО</string>
+    <string name="title_activity_separate_check">SeparateCheck</string>
+
+    <string name="point_no">point_no</string>
+    <string name="number_of_points">number_of_points</string>
+    <string name="nomer_punkta_textview_text">Номер пункта</string>
+</resources>

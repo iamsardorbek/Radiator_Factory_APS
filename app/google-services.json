@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "300048895554",
+    "firebase_url": "https://radiator-factory-aps.firebaseio.com",
+    "project_id": "radiator-factory-aps",
+    "storage_bucket": "radiator-factory-aps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300048895554:android:cef7a07104aa6a153827db",
+        "android_client_info": {
+          "package_name": "com.akfagroup.radiatorfactoryaps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300048895554-osklg40hgnivlo5r1a60tqoch91h6fv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.akfagroup.radiatorfactoryaps",
+            "certificate_hash": "e9bd74558823a5a53be90259e308a7b9128cd0e0"
+          }
+        },
+        {
+          "client_id": "300048895554-mjm3i6n99i250vs6sfbr39q1qc6udf4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv1KHa7a-jC8u_BlDKAHoibb_Rls9dV5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300048895554-mjm3i6n99i250vs6sfbr39q1qc6udf4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

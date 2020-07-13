@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/login_background"
+    tools:context=".QRScanner"
+    android:weightSum="2">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/directionsTextView"
+        android:layout_marginVertical="8dp"
+        android:textSize='15sp'
+        android:paddingVertical="10dp"
+        android:gravity="center"
+        android:textColor="@color/text"
+        android:text="@string/qr_scanner_text_top" />
+
+    <SurfaceView
+        android:id="@+id/camerapreview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.6"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edit"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/qr_text_below_scanner"
+        android:textColor="@color/text"
+        android:textSize='15sp' />
+<!--    <ImageButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/flashlight_off"-->
+<!--        android:padding="15dp"-->
+<!--        android:id="@+id/flashlight_control"-->
+<!--        android:layout_gravity="center"/>-->
+</LinearLayout>

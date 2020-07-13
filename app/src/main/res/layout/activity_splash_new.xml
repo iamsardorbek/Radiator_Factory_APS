@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/grey_background"
+tools:context=".SplashActivity">
+
+<ImageView
+    android:id="@+id/icon"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:src="@drawable/aps_new_logo"
+    android:layout_marginTop="200dp"
+    android:layout_centerHorizontal="true"
+    android:contentDescription="@string/logo" />
+
+<TextView
+    android:id="@+id/big_title"
+    android:layout_width="wrap_content"
+    android:gravity="center"
+    android:layout_height="30dp"
+    android:text="@string/apsTitle"
+    android:textSize="20sp"
+    app:fontFamily="sans-serif-condensed-medium"
+    android:layout_below="@+id/icon"
+    android:layout_centerHorizontal="true"
+    android:textColor="@color/text"
+    android:layout_marginVertical="10dp"
+    android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/small_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/big_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/r_and_dTitle"
+        android:textColor="@color/text"
+        app:fontFamily="sans-serif-condensed-medium" />
+
+<ProgressBar
+    android:id="@+id/progressBar"
+    android:layout_width="80dp"
+    android:layout_height="57dp"
+    android:layout_marginBottom="212dp"
+    android:padding="6dp"
+    android:layout_below="@+id/small_title"
+    android:layout_centerHorizontal="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+</RelativeLayout>

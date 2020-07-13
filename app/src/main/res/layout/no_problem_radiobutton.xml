@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:theme="@style/NoProblemRadiobutton"
+    android:textStyle="bold"
+    android:text="SALA"
+    android:gravity="center"
+    android:textColorHighlight="#8AC4FFC4"
+    android:layout_weight="1"
+    android:padding="10dp"
+    android:background="@drawable/no_problem_radiobutton"
+    >
+
+</RadioButton>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/login_background"
+    android:layout_height="match_parent"
+    android:id="@+id/quest_activity_point_dynamic"
+    tools:context=".QuestPointDynamic">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <TextView
+                    android:id="@+id/equipmentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:padding="5dp"
+                    android:textColor="@color/text"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:background="@color/text" />
+
+                <TextView
+                    android:id="@+id/nomer_punkta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/nomer_point_textview"
+                    android:textColor="@color/text"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:id="@+id/scrollLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+                <Button
+                    android:id="@+id/point_deactivated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/edit_red_accent"
+                    android:drawableRight="@drawable/deactivated"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:text="Пункт не задействован"
+                    android:textColor="@color/text"
+                    tools:ignore="RtlSymmetry" />
+
+                <Button
+                    android:id="@+id/next_point"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/edit_red_accent"
+                    android:drawableEnd="@drawable/next"
+                    android:drawableRight="@drawable/next"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/next_point_button_text"
+                    android:textColor="@color/text"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
+
+    </ScrollView>
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/master_menu"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        android:id="@+id/nv">
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>
