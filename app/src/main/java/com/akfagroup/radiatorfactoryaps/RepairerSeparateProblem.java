@@ -1,13 +1,9 @@
 package com.akfagroup.radiatorfactoryaps;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -162,7 +158,7 @@ public class RepairerSeparateProblem extends AppCompatActivity implements View.O
         intent.putExtra("Номер цеха", shopNo);
         intent.putExtra("Номер линии", equipmentNo);
         intent.putExtra("Номер пункта", nomerPunkta);
-        intent.putExtra("Открой PointDynamic", "ремонтник");
+        intent.putExtra("Действие", "ремонтник");
         intent.putExtra("Логин пользователя", employeeLogin);
         intent.putExtra("ID проблемы в таблице Maintenance_problems", IDOfTheProblem);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -232,35 +228,4 @@ public class RepairerSeparateProblem extends AppCompatActivity implements View.O
         return false;
     }
 
-    @Override public void onBackPressed() {
-        if(isTaskRoot()) {
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            if (sharedPrefs.getString("Логин пользователя", null) == null) //Еcли в sharedPrefs есть данные юзера, открой соот активти
-            {
-                stopService(new Intent(getApplicationContext(), BackgroundService.class)); //если до этого уже сервис был включен, выключи сервис
-                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                final Handler handler = new Handler();
-                Runnable runnableCode = new Runnable() {
-                    @Override
-                    public void run() {
-                        //do something you want
-                        //stop service
-                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        if (sharedPrefs.getString("Логин пользователя", null) == null) //Еcли в sharedPrefs есть данные юзера, открой соот активти
-                        {
-                            stopService(new Intent(getApplicationContext(), BackgroundService.class)); //если до этого уже сервис был включен, выключи сервис
-                        }
-                        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        notificationManager.cancelAll();
-
-                    }
-                };
-                handler.postDelayed(runnableCode, 12000);
-            }
-
-        }
-        super.onBackPressed();
-    }
 }

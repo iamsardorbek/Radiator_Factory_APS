@@ -78,18 +78,6 @@
         android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_marginVertical="10dp">
-        <CheckBox
-            android:id="@+id/remember_me"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text"
-            android:layout_gravity="center"
-            android:textSize="13sp"
-            android:text="@string/remember_me"
-            android:buttonTint="@color/borders"
-            android:layout_marginLeft="25dp"
-            android:scaleX="1.2"
-            android:scaleY="1.2"/>
 
     </LinearLayout>
 

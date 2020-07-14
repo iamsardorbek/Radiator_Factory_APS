@@ -17,6 +17,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -155,6 +157,8 @@ public class InitNavigationBar {
                             editor.commit();
                             Intent logOut = new Intent(context, Login.class);
                             logOut.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users/" + employeeLogin);
+                            userRef.child("active_session_android_id").removeValue();
                             activity.startActivity(logOut);
                             activity.finish();
                         default:

@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,7 @@ public class BackgroundService extends Service {
     private static final String CHANNEL_ID = "com.akfa.apsproject", MAINTENANCE_PROBS_CHANNEL_ID = "maintenance problems channel"; //название канала уведомлений
     private final int RUNNABLE_REFRESH_TIME = 10000; //периодичность уведомлений вызовов/сроч проблем
     List<String> urgentProblems = new ArrayList<String>(); //для хранения данных об уже обнаруженных срочных проблемах
+    List<Integer> urgentProblemsIDs = new ArrayList<>(), callsIDs = new ArrayList<>();
     List<String> maintenanceProblems = new ArrayList<String>(); //для хранения данных об уже обнаруженных простых проблемах
     private long notificationCount = 2, maintanceProblemsNotificationsCount = 100;
     private boolean stopped = false;
@@ -46,6 +48,7 @@ public class BackgroundService extends Service {
     @Override //при запуске сервиса
     public int onStartCommand(Intent intent, int flags, int startId) {
         createMaintenanceProbsNotificationChannel();
+        Log.i("BG Service",  "Starting BG Service");
         employeePosition = intent.getExtras().getString("Должность");
         employeeLogin = intent.getExtras().getString("Логин пользователя");
         startForegroundWithNotification();
@@ -132,19 +135,24 @@ public class BackgroundService extends Service {
                     mobilemode.setStreamVolume(AudioManager.STREAM_ALARM, mobilemode.getStreamMaxVolume(AudioManager.STREAM_RING), 0);
                 }
 
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                for(int i = 2; i <=notificationCount; i++)
-                {
-                    mNotificationManager.cancel(i);
-                }
-                notificationCount = 2;
-                if(!stopped) {
+//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                for(int i = 2; i <= notificationCount; i++)
+//                {
+//                    mNotificationManager.cancel(i);
+//                }
+                notificationCount = 2; //foreground notification имеет айди 1, поэтому последующие айди начинаются с 2
+                if(!stopped) { //stopped булеан, который дает знать, надо дальше высвечивать или нет
                 if (!employeePosition.equals("operator")) { //работает у всех кроме оператора, потому что он сам сообщает про срочные и ТО проблемы
                     DatabaseReference urgentProblemsRef = FirebaseDatabase.getInstance().getReference("Urgent_problems"); //мониторить срочные проблемы ( с пультов)
-                    urgentProblemsRef.addValueEventListener(new ValueEventListener() { //привязываем слушатель к срочным проблемаам
+                    urgentProblemsRef.addListenerForSingleValueEvent(new ValueEventListener() { //привязываем слушатель к срочным проблемаам
                         @Override
                         public void onDataChange(@NonNull DataSnapshot urgentProbsSnap) {
                             if(urgentProbsSnap.exists()) {
+                                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                for (int urgentProblemID : urgentProblemsIDs) {
+                                    mNotificationManager.cancel(urgentProblemID);
+                                }
+                                urgentProblemsIDs = new ArrayList<>();
                                 for (DataSnapshot urgentProbSnap : urgentProbsSnap.getChildren()) { //пройдись по проблемам и если есть DETECTED проблемы, о которых ты еще не вывел уведомления, сообщи о них в новом уведомлении
                                     String thisUrgentProbStatus = urgentProbSnap.child("status").getValue().toString();
                                     final String thisUrgentProbKey = urgentProbSnap.getKey();
@@ -186,6 +194,7 @@ public class BackgroundService extends Service {
                                                         notificationManager.notify((int) notificationCount, builder.build());
                                                         urgentProblems.add(thisUrgentProbKey); //добавь эту проблему в список уже сообщенных
                                                         Vibration.vibration(getApplicationContext());
+                                                        urgentProblemsIDs.add((int) notificationCount);
                                                         notificationCount++;
                                                     }
                                                 }
@@ -194,7 +203,8 @@ public class BackgroundService extends Service {
                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
                                                 }
                                             });
-                                        } else {
+                                        }
+                                        else {
                                             Intent intent = new Intent(getApplicationContext(), UrgentProblemsList.class);
                                             intent.putExtra("Логин пользователя", employeeLogin);
                                             intent.putExtra("Должность", employeePosition);
@@ -214,6 +224,7 @@ public class BackgroundService extends Service {
                                             notificationManager.notify((int) notificationCount, builder.build());
                                             urgentProblems.add(thisUrgentProbKey); //добавь эту проблему в список уже сообщенных
                                             Vibration.vibration(getApplicationContext());
+                                            urgentProblemsIDs.add((int) notificationCount);
                                             notificationCount++;
                                         }
                                     }
@@ -235,6 +246,12 @@ public class BackgroundService extends Service {
                         callsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override public void onDataChange(@NonNull DataSnapshot callsSnap) {
                                 if(callsSnap.exists()) {
+                                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    for (int callID : callsIDs) {
+                                        mNotificationManager.cancel(callID);
+                                    }
+                                    callsIDs = new ArrayList<>();
+
                                     for (final DataSnapshot callSnap : callsSnap.getChildren()) {
                                         boolean callComplete = (boolean) callSnap.child("complete").getValue();
                                         String whoIsNeededPosition = callSnap.child("who_is_needed_position").getValue().toString();
@@ -272,6 +289,7 @@ public class BackgroundService extends Service {
                                                                 // notificationId is a unique int for each notification that you must define
                                                                 notificationManager.notify((int) notificationCount, builder.build());
                                                                 Vibration.vibration(getApplicationContext());
+                                                                callsIDs.add((int) notificationCount);
                                                                 notificationCount++;
                                                             }
 
@@ -314,6 +332,7 @@ public class BackgroundService extends Service {
                                                                 // notificationId is a unique int for each notification that you must define
                                                                 notificationManager.notify((int) notificationCount, builder.build());
                                                                 Vibration.vibration(getApplicationContext());
+                                                                callsIDs.add((int) notificationCount);
                                                                 notificationCount++;
                                                             }
 
@@ -349,6 +368,7 @@ public class BackgroundService extends Service {
                                                     // notificationId is a unique int for each notification that you must define
                                                     notificationManager.notify((int) notificationCount, builder.build());
                                                     Vibration.vibration(getApplicationContext());
+                                                    callsIDs.add((int) notificationCount);
                                                     notificationCount++;
                                                     break;
                                             }
@@ -371,6 +391,8 @@ public class BackgroundService extends Service {
     }
 
     @Override public void onDestroy() {
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
         stopped = true;
         super.onDestroy();
     }

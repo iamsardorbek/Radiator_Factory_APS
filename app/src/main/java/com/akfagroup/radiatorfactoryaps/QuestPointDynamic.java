@@ -518,7 +518,7 @@ public class QuestPointDynamic extends AppCompatActivity implements View.OnTouch
         intent.putExtra(getString(R.string.nomer_punkta_textview_text), pointNo);
         intent.putExtra("Количество пунктов", numOfPoints);
         intent.putExtra("startTimeMillis", startTimeMillis);
-        intent.putExtra("Открой PointDynamic", "да");
+        intent.putExtra("Действие", "Открой PointDynamic");
         intent.putExtra("Логин пользователя", employeeLogin);
         intent.putExtra("Количество обнаруженных проблем", problemsCount);
         intent.putExtra("Должность", employeePosition);

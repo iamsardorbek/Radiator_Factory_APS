@@ -32,6 +32,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 //------ПОКАЗЫВАЕТ QR КОД НА ПУЛЬТЕ ОПЕРАТОРА, ЧТОБЫ ПОДОШЕДШИЙ СПЕЦИАЛИСТ ОТСКАНИРОВАЛ (ДОКАЗАТЕЛЬСТВО ЧТО ОН ПРИШЕЛ НА САМОМ ДЕЛЕ / REALITY CHECK) ------//
 //------ТАКЖЕ ЧЕРЕЗ 15 СЕКУНД ПОСЛЕ СВОЕГО ЗАПУСКА, ЗАПУСКАЕТ RUNNABLE, ОБНОВЛЯЮЩИЙ КАЖДЫЕ 15 СЕК QR ТЕКУЩЕЙ СРОЧНОЙ ПРОБЛЕМЫ (ЧТОБЫ ИЗБЕЖАТЬ ТОГО, ЧТО ОПЕРАТОР ОТПРАВЛЯЕТ ЧЕРЕЗ ТГ СКРИН QR И МАСТЕР НЕ ПРИХОДИТ)------//
 public class QRCodeDialog extends DialogFragment {
+    private static final int BACK_PRESSED = 1, SPECIALIST_CAME = 2;
     private QRCodeDialogListener listener; //обрабатывает и передает данные в pultActivity с помощью интерфейса
 
     private static final long QR_REFRESH_TIME = 15000; //in millis
@@ -54,10 +55,12 @@ public class QRCodeDialog extends DialogFragment {
         qrCode = view.findViewById(R.id.qr_code);
         back = view.findViewById(R.id.back);
         Bundle arguments = getArguments();
-        final String shopName, equipmentName, operatorLogin;
+        final String shopName, equipmentName, operatorLogin, nomerPulta, position;
         shopName = arguments.getString("Название цеха");
         equipmentName = arguments.getString("Название линии");
         operatorLogin = arguments.getString("Логин пользователя");
+        position = arguments.getString("Должность");
+        nomerPulta = arguments.getString("Номер пульта");
 //        String qrCodeString = arguments.getString("Код"); //encode in the QR code
         whoIsNeededIndex = arguments.getInt("Вызвать специалиста");
 
@@ -72,15 +75,35 @@ public class QRCodeDialog extends DialogFragment {
                     String equipmentNameDB = urgentProblemSnap.child("equipment_name").getValue().toString();
                     String operatorLoginDB = urgentProblemSnap.child("operator_login").getValue().toString();
                     String status = urgentProblemSnap.child("status").getValue().toString();
-                    if(shopName.equals(shopNameDB) && equipmentName.equals(equipmentNameDB) && operatorLogin.equals(operatorLoginDB) && status.equals("DETECTED"))
+                    String nomerPultaDB = urgentProblemSnap.child("pult_no").getValue().toString();
+                    String whoIsNeededPositionDB = urgentProblemSnap.child("who_is_needed_position").getValue().toString();
+                    if(shopName.equals(shopNameDB) && equipmentName.equals(equipmentNameDB) && operatorLogin.equals(operatorLoginDB) && status.equals("DETECTED") && nomerPulta.equals(nomerPultaDB) && position.equals(whoIsNeededPositionDB))
                     { //проблема с теми же данными, и к которой еще специалист не пришел
-                        DatabaseReference urgentProblemQrRandomCodeRef = urgentProblemsRef.child(urgentProblemSnap.getKey()).child("qr_random_code");
                         if(!runnableStarted)
                         { //если runnable не запустил еще, запусти
                             initializeRunnable(urgentProblemSnap.getKey());
                             stopped = false;
                             handler.postDelayed(runnableCode, QR_REFRESH_TIME); //runnable запустится через QR_REFRESH_TIME мс
                         }
+                        final DatabaseReference urgentProblemRef = urgentProblemSnap.getRef();
+                        urgentProblemRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot urgentProblemInnerSnap) {
+                                String status = urgentProblemInnerSnap.child("status").getValue().toString();
+                                if(status.equals("SPECIALIST_CAME"))
+                                {
+                                    closeDialog(SPECIALIST_CAME);
+                                    urgentProblemRef.removeEventListener(this);
+                                    return;
+                                }
+                                else {
+                                    String qrCodeString = urgentProblemSnap.child("qr_random_code").getValue().toString();
+                                    generateQrBitmap(qrCodeString); //к сожалению, контент image view с QR не обновляется
+                                }
+                            }
+                            @Override public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        });
+                        DatabaseReference urgentProblemQrRandomCodeRef = urgentProblemsRef.child(urgentProblemSnap.getKey()).child("qr_random_code");
                         urgentProblemQrRandomCodeRef.addValueEventListener(new ValueEventListener() { //прислушивайся к изменениям в БД
                             @Override public void onDataChange(@NonNull DataSnapshot qrRandomCodeSnap) {
                                 String qrCodeString = urgentProblemSnap.child("qr_random_code").getValue().toString();
@@ -100,7 +123,7 @@ public class QRCodeDialog extends DialogFragment {
     }
 
     public interface QRCodeDialogListener { //иниц интерфейса
-        void onQRCodeDialogCanceled(int whoIsNeededIndex);
+        void onQRCodeDialogCanceled(int whoIsNeededIndex, int andonState);
     }
 
     // Define the code block to be executed
@@ -133,14 +156,32 @@ public class QRCodeDialog extends DialogFragment {
                     break;
                 case MotionEvent.ACTION_UP: //действие при клике
                     back.setBackgroundResource(R.drawable.red_rectangle);
-                    stopped = true; //чтобы runnable остановился
-                    listener.onQRCodeDialogCanceled(whoIsNeededIndex); //отправим через интерфейс диалога в PultActivity сообщение, что нажали "назад"
-                    getDialog().dismiss(); //закрыть диалог
+                    closeDialog(BACK_PRESSED);
                     break;
             }
             return false;
         }
     };
+
+    public void closeDialog(int code)
+    {
+        if(!stopped) //чтобы повторно не вызывал dismiss() пустого диалога (already dismissed dialog)
+            switch (code)
+            {
+                case BACK_PRESSED:
+                    stopped = true; //чтобы runnable остановился
+                    listener.onQRCodeDialogCanceled(whoIsNeededIndex, 1); //отправим через интерфейс диалога в PultActivity сообщение, что нажали "назад" или специалист пришел
+                    getDialog().dismiss(); //закрыть диалог
+                    break;
+                case SPECIALIST_CAME:
+                    stopped = true; //чтобы runnable остановился
+                    listener.onQRCodeDialogCanceled(whoIsNeededIndex, 2); //отправим через интерфейс диалога в PultActivity сообщение, что нажали "назад" или специалист пришел
+                    this.getDialog().dismiss(); //закрыть диалог
+                    break;
+
+            }
+
+    }
 
     private void generateQrBitmap(String qrCodeString)
     {
@@ -160,7 +201,7 @@ public class QRCodeDialog extends DialogFragment {
         return new Dialog(getActivity(), getTheme()){
             @Override public void onBackPressed() {
                 //при наж кнопки назад информируй PultActivity через интерфейс
-                listener.onQRCodeDialogCanceled(whoIsNeededIndex);
+                listener.onQRCodeDialogCanceled(whoIsNeededIndex, 1);
                 getDialog().dismiss();
             }
         };

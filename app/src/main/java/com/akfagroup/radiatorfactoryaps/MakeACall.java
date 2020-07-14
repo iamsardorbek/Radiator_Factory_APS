@@ -1,11 +1,7 @@
 package com.akfagroup.radiatorfactoryaps;
 
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -165,7 +161,7 @@ public class MakeACall extends AppCompatActivity implements View.OnTouchListener
                         break;
                 }
                 Intent openQR = new Intent(getApplicationContext(), QRScanner.class);
-                openQR.putExtra("Открой PointDynamic", "определи адрес"); //описание действия для QR сканера
+                openQR.putExtra("Действие", "определи адрес"); //описание действия для QR сканера
                 openQR.putExtra("Должность", employeePosition);
                 openQR.putExtra("Кого вызываем", whoIsCalled);
                 openQR.putExtra("Логин пользователя", employeeLogin); //передавать логин пользователя взятый из Firebase
@@ -184,34 +180,4 @@ public class MakeACall extends AppCompatActivity implements View.OnTouchListener
         return super.onOptionsItemSelected(item);
     }
 
-    @Override public void onBackPressed() {
-        if(isTaskRoot()) {
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            if (sharedPrefs.getString("Логин пользователя", null) == null) //Еcли в sharedPrefs есть данные юзера, открой соот активти
-            {
-                stopService(new Intent(getApplicationContext(), BackgroundService.class)); //если до этого уже сервис был включен, выключи сервис
-                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                final Handler handler = new Handler();
-                Runnable runnableCode = new Runnable() {
-                    @Override
-                    public void run() {
-                        //do something you want
-                        //stop service
-                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        if (sharedPrefs.getString("Логин пользователя", null) == null) //Еcли в sharedPrefs есть данные юзера, открой соот активти
-                        {
-                            stopService(new Intent(getApplicationContext(), BackgroundService.class)); //если до этого уже сервис был включен, выключи сервис
-                        }
-                        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        notificationManager.cancelAll();
-
-                    }
-                };
-                handler.postDelayed(runnableCode, 12000);
-            }
-        }
-        super.onBackPressed();
-    }
 }

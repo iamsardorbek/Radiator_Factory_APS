@@ -70,7 +70,7 @@ public class MachineLayoutActivity extends AppCompatActivity implements View.OnT
                 intent.putExtra("Номер линии", equipmentNo);
                 int INITIAL_POINT_NUMBER_FOR_QR = 1;
                 intent.putExtra(getString(R.string.nomer_punkta_textview_text), INITIAL_POINT_NUMBER_FOR_QR);
-                intent.putExtra("Открой PointDynamic", "да");
+                intent.putExtra("Действие", "Открой PointDynamic");
                 intent.putExtra(getString(R.string.nomer_punkta_textview_text), 1);
                 String login = getIntent().getExtras().getString("Логин пользователя");
                 intent.putExtra("Логин пользователя", login); //передавать логин пользователя взятый из Firebase

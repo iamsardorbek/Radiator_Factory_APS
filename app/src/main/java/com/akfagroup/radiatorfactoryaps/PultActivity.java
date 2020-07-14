@@ -1,13 +1,8 @@
 package com.akfagroup.radiatorfactoryaps;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,7 +37,7 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
 
     private boolean[] btnBlocked = new boolean[NUM_OF_BUTTONS]; //состояния заблокированности кнопок. Блокируется, если обнаружили проблему и вызвали спеца, а он еще не пришел
     private String[] positionTypes = {"repair", "quality", "raw", "master"}; //в БД в ветке пульта NUM_OF_BUTTONS дочерних веток. На момент написания коммента, это repair, quality, raw, master
-                                                                            //positionTypes создан для упрощения работы с этими подветками и связания из строковый названий с числами-индексами
+    //positionTypes создан для упрощения работы с этими подветками и связания из строковый названий с числами-индексами
 
     private String nomerPulta, equipmentName, shopName; //данные, хранящиеся в ветке отдельного пользотвателя-оператора (номер пульта, назв-е линии, цеха)
     private String employeeLogin, employeePosition; //inter-activity strings
@@ -64,27 +59,27 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
     //для navigation bar
     private ActionBarDrawerToggle toggle;
 
-  @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_main);
-      initInstances(); //инициализация всех layout элементов
-      setAndonsVisibility(false); //спрятать все кнопки-андоны, пока не установлена связь с веткой пульта в БД
-      Bundle arguments = getIntent().getExtras(); //аргументы переданные с других активити
-      if(arguments != null) //был ли сделан правилно логин и возвратил ли он оттуда номер пульта, или передал ли предыдущий активити аргументы
-      {
-          employeePosition = arguments.getString("Должность");
-          employeeLogin = arguments.getString("Логин пользователя");
-          //создать ссылку на ветку пользователя для получения номера пульта
-          DatabaseReference userRef = database.getReference("Users/" + employeeLogin);
-          findPathToRelevantPult(); //инициализировать pathToRelevantPultQuery для пульта этого юзера
-          userRef.addListenerForSingleValueEvent(pathToRelevantPultQuery); //привязать pathToRelevantPultQuery к ветке пользователей (там далее берутся данные о линии, цехе и номере пульта, что запускает потом асинхронный listener для пульта
-      }
-      else Toast.makeText(getApplicationContext(), "Ошибка, постарайтесь зайти снова", Toast.LENGTH_LONG).show(); //сработает, если в код сделали изменения и это нарушило стабильность работы приложения
-      //напр: забыли приписать putExtras к интенту, открывшему этот активити PultActivity
-      toggle = InitNavigationBar.setUpNavBar(PultActivity.this, getApplicationContext(),  getSupportActionBar(), employeeLogin, employeePosition, R.id.pult, R.id.activity_main); //setUpNavBar выполняет все действия и возвращает toggle, которые используется в функции onOptionsItemSelected()
-      setTitle("Загрузка данных...");
-  }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initInstances(); //инициализация всех layout элементов
+        setAndonsVisibility(false); //спрятать все кнопки-андоны, пока не установлена связь с веткой пульта в БД
+        Bundle arguments = getIntent().getExtras(); //аргументы переданные с других активити
+        if(arguments != null) //был ли сделан правилно логин и возвратил ли он оттуда номер пульта, или передал ли предыдущий активити аргументы
+        {
+            employeePosition = arguments.getString("Должность");
+            employeeLogin = arguments.getString("Логин пользователя");
+            //создать ссылку на ветку пользователя для получения номера пульта
+            DatabaseReference userRef = database.getReference("Users/" + employeeLogin);
+            findPathToRelevantPult(); //инициализировать pathToRelevantPultQuery для пульта этого юзера
+            userRef.addListenerForSingleValueEvent(pathToRelevantPultQuery); //привязать pathToRelevantPultQuery к ветке пользователей (там далее берутся данные о линии, цехе и номере пульта, что запускает потом асинхронный listener для пульта
+        }
+        else Toast.makeText(getApplicationContext(), "Ошибка, постарайтесь зайти снова", Toast.LENGTH_LONG).show(); //сработает, если в код сделали изменения и это нарушило стабильность работы приложения
+        //напр: забыли приписать putExtras к интенту, открывшему этот активити PultActivity
+        toggle = InitNavigationBar.setUpNavBar(PultActivity.this, getApplicationContext(),  getSupportActionBar(), employeeLogin, employeePosition, R.id.pult, R.id.activity_main); //setUpNavBar выполняет все действия и возвращает toggle, которые используется в функции onOptionsItemSelected()
+        setTitle("Загрузка данных...");
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     protected void initInstances(){
@@ -189,8 +184,8 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
                     String operatorLogin = urgentProblem.getOperator_login();
                     if(operatorLogin.equals(employeeLogin) && urgentProblemSnap.child("status").getValue().toString().equals(DETECTED))
                     { //если проблема относится к данному пользователю, но специалист еще не пришел (состояние 1), но оператор сообщил  о проблеме уже до этого
-                        String whoIsNeededLogin = urgentProblem.getWho_is_needed_position();
-                        int whoIsNeededIndex = renderWhoIsNeededIndex(whoIsNeededLogin); //какая кнопка было нажата (кого вызвали?)
+                        String whoIsNeededPosition = urgentProblem.getWho_is_needed_position();
+                        int whoIsNeededIndex = renderWhoIsNeededIndex(whoIsNeededPosition); //какая кнопка было нажата (кого вызвали?)
 
                         btnBlocked[whoIsNeededIndex] = true; //заблокируй кнопку
                         btnCondition[whoIsNeededIndex] = 1; //смени состояние кнопки в мигающее
@@ -263,12 +258,12 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void setAndonsVisibility(boolean visible) {
-      //измени видимость кнопок
-      int visibilityState;
-      if(visible) visibilityState = View.VISIBLE;
-      else visibilityState = View.INVISIBLE;
-      for(Button andon : andons) //сделай все кнопки либо видимыми, либо скрытыми
-          andon.setVisibility(visibilityState);
+        //измени видимость кнопок
+        int visibilityState;
+        if(visible) visibilityState = View.VISIBLE;
+        else visibilityState = View.INVISIBLE;
+        for(Button andon : andons) //сделай все кнопки либо видимыми, либо скрытыми
+            andon.setVisibility(visibilityState);
     }
 
     private ValueEventListener getUrgentProblemStatusListener(final int whoIsNeededIndex)
@@ -292,14 +287,14 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-      //связано с навигейшн бар
+        //связано с навигейшн бар
         if(toggle.onOptionsItemSelected(item)) return true;
         else return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onTouch(View button, MotionEvent event) {
-      //обработка касаний - зажато (DOWN для красоты) , отпущено (UP)
+        //обработка касаний - зажато (DOWN для красоты) , отпущено (UP)
         switch(event.getAction())
         {
             case MotionEvent.ACTION_DOWN: //зажатое состояние (pressed)
@@ -384,6 +379,7 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
             bundle.putString("Название цеха", shopName);
             bundle.putString("Название линии", equipmentName);
             bundle.putString("Логин пользователя", employeeLogin);
+            bundle.putString("Номер пульта", nomerPulta);
             bundle.putString("Должность", positionTypes[whoIsNeededIndex]);
             dialogFragment.setArguments(bundle);
             dialogFragment.show(getSupportFragmentManager(), "QR Код");
@@ -446,7 +442,7 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
         updateButton(whoIsNeededIndex);
 
         //вбить обнаруженную срочную проблему в базу
-        thisUrgentProblem.setValue(new UrgentProblem(pointNo, equipmentLineName, shopName, operatorLogin, positionTypes[whoIsNeededIndex], qrRandomCode, dateDetected, timeDetected, DETECTED)); //DETECTED - это строка "DETECTED"
+        thisUrgentProblem.setValue(new UrgentProblem(pointNo, nomerPulta, equipmentLineName, shopName, operatorLogin, positionTypes[whoIsNeededIndex], qrRandomCode, dateDetected, timeDetected, DETECTED)); //DETECTED - это строка "DETECTED"
         btnBlocked[whoIsNeededIndex] = true; //задать состояние кнопки блокированным
 
         //здесь же добавить БД слушатель, чтобы реагировал позднее на изменения в БД (specialist_came, solved)
@@ -455,48 +451,17 @@ public class PultActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onDialogCanceled(int whoIsNeededIndex) {
-      //если диалог выбора проблемного участка отменили/закрыли
+        //если диалог выбора проблемного участка отменили/закрыли
         //возврати мигающую кнопку в нейтральное состояние SOLVED (0)
         btnCondition[whoIsNeededIndex] = 0;
         updateButton(whoIsNeededIndex);
     }
 
     @Override
-    public void onQRCodeDialogCanceled(int whoIsNeededIndex) {
+    public void onQRCodeDialogCanceled(int whoIsNeededIndex, int andonState) {
         //чтобы кнопка не  зависла в состоянии ACTION_DOWN (серый фон при нажатии), повторно зададим ее фон вызовом метода setAndonBackground
-        int thisAndonCondition = btnCondition[whoIsNeededIndex];
-        setAndonBackground(whoIsNeededIndex, thisAndonCondition);
+        setAndonBackground(whoIsNeededIndex, andonState);
         updateButton(whoIsNeededIndex);
     }
 
-    @Override public void onBackPressed() {
-        if(isTaskRoot()) {
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            if (sharedPrefs.getString("Логин пользователя", null) == null) //Еcли в sharedPrefs есть данные юзера, открой соот активти
-            {
-                stopService(new Intent(getApplicationContext(), BackgroundService.class)); //если до этого уже сервис был включен, выключи сервис
-                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                final Handler handler = new Handler();
-                Runnable runnableCode = new Runnable() {
-                    @Override
-                    public void run() {
-                        //do something you want
-                        //stop service
-                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        if (sharedPrefs.getString("Логин пользователя", null) == null) //Еcли в sharedPrefs есть данные юзера, открой соот активти
-                        {
-                            stopService(new Intent(getApplicationContext(), BackgroundService.class)); //если до этого уже сервис был включен, выключи сервис
-                        }
-                        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        notificationManager.cancelAll();
-
-                    }
-                };
-                handler.postDelayed(runnableCode, 12000);
-            }
-        }
-        super.onBackPressed();
-    }
 }

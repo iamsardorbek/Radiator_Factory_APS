@@ -3,13 +3,14 @@ package com.akfagroup.radiatorfactoryaps;
 //---------КЛАСС ОБЪЕКТОВ ИСПОЛЬЗУЕТСЯ В PULT И URGENT PROB LIST ДЛЯ УДОБНОЙ РАБОТЫ С ДАННЫМИ ПРО СРОЧНЫЕ ПРОБЛЕМЫ----------//
 //---------ДЛЯ ЗАПИСИ NODES В FIREBASE НЕПОСРЕДСТВЕННО ИЗ ОБЪЕКТОВ СУЩ ТРЕБОВАНИЕ, ЧТО У КЛАССА ДОЛЖЕН БЫТЬ ПУСТОЙ КОНСТРУКТОР, PUBLIC ГЕТТЕРЫ---------//
 public class UrgentProblem {
-    public String shop_name, equipment_name, qr_random_code, operator_login, who_is_needed_position, date_detected, time_detected, status;
+    public String shop_name, equipment_name, qr_random_code, operator_login, who_is_needed_position, date_detected, time_detected, status, pult_no;
     public int point_no;
     public UrgentProblem() { }
 
-    public UrgentProblem(int pointNo, String equipmentName, String shopName, String operatorLogin, String whoIsNeededLogin, String qrRandomCode, String dateTimeDetected, String time_detected, String status)
+    public UrgentProblem(int pointNo, String pult_no, String equipmentName, String shopName, String operatorLogin, String whoIsNeededLogin, String qrRandomCode, String dateTimeDetected, String time_detected, String status)
     {
         this.point_no = pointNo;
+        this.pult_no = pult_no;
         this.shop_name = shopName;
         this.equipment_name = equipmentName;
         this.qr_random_code = qrRandomCode;
@@ -54,5 +55,9 @@ public class UrgentProblem {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getPult_no() {
+        return pult_no;
     }
 }

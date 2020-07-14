@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +32,6 @@ public class Login extends AppCompatActivity {
     private TextView loading;
     private EditText passwordView, loginView;
     private Button enter;
-    private CheckBox rememberMe;
     //данные, введенные в полях edit text
     private String login, password;
 
@@ -71,52 +70,58 @@ public class Login extends AppCompatActivity {
                             if (user.exists()) // если подветка такая существует
                             {//3 ifs with boolean checker functions in condition: isOperator, isMaster, isRepairer
                                 if (user.child("password").getValue().toString().equals(password)) { //если и пароль введен правильно (проверка с подветкой user->password
-                                    if (user.child("position").getValue().toString().equals("operator")) { //ОПЕРАТОР
-                                        Intent openPult = new Intent(getApplicationContext(), PultActivity.class); //открой пульт
-                                        openPult.putExtra("Логин пользователя", login);
-                                        openPult.putExtra("Должность", user.child("position").getValue().toString());
-                                        startActivity(openPult);
-                                    } else if (user.child("position").getValue().toString().equals("master")) {//МАСТЕР
-                                        Intent openUrgentProblemsList = new Intent(getApplicationContext(), QuestListOfEquipment.class); //actually there should be the FactoryCondition.class, but it is incomplete yet
-                                        openUrgentProblemsList.putExtra("Логин пользователя", login);
-                                        openUrgentProblemsList.putExtra("Должность", user.child("position").getValue().toString());
-                                        startActivity(openUrgentProblemsList);
-                                    } else if (user.child("position").getValue().toString().equals("repair")) { //РЕМОНТНИК
-                                        Intent openUrgentProblemsList = new Intent(getApplicationContext(), QuestListOfEquipment.class);
-                                        openUrgentProblemsList.putExtra("Логин пользователя", login);
-                                        openUrgentProblemsList.putExtra("Должность", user.child("position").getValue().toString());
-                                        startActivity(openUrgentProblemsList);
-                                    } else if (user.child("position").getValue().toString().equals("raw") || user.child("position").getValue().toString().equals("quality")) { //ОТК / СЫРЬЕ
-                                        Intent openUrgentProblemsList = new Intent(getApplicationContext(), UrgentProblemsList.class);
-                                        openUrgentProblemsList.putExtra("Логин пользователя", login);
-                                        openUrgentProblemsList.putExtra("Должность", user.child("position").getValue().toString());
-                                        startActivity(openUrgentProblemsList);
-                                    } else if(user.child("position").getValue().toString().equals("head")){
-                                        Intent openTodayChecks = new Intent(getApplicationContext(), TodayChecks.class);
-                                        openTodayChecks.putExtra("Логин пользователя", login);
-                                        openTodayChecks.putExtra("Должность", user.child("position").getValue().toString());
-                                        startActivity(openTodayChecks);
-                                    }
+                                    if(!user.child("active_session_android_id").exists()) {
+                                        String androidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                                        DatabaseReference userRef = user.getRef();
+                                        userRef.child("active_session_android_id").setValue(androidID);
 
-                                    if (rememberMe.isChecked()) { // был ли отмечен чекбокс "ЗАПОМНИ МЕНЯ"? Если да, запиши логин и должность в SharedPrefs
+                                        if (user.child("position").getValue().toString().equals("operator")) { //ОПЕРАТОР
+                                            Intent openPult = new Intent(getApplicationContext(), PultActivity.class); //открой пульт
+                                            openPult.putExtra("Логин пользователя", login);
+                                            openPult.putExtra("Должность", user.child("position").getValue().toString());
+                                            startActivity(openPult);
+                                        } else if (user.child("position").getValue().toString().equals("master")) {//МАСТЕР
+                                            Intent openUrgentProblemsList = new Intent(getApplicationContext(), QuestListOfEquipment.class); //actually there should be the FactoryCondition.class, but it is incomplete yet
+                                            openUrgentProblemsList.putExtra("Логин пользователя", login);
+                                            openUrgentProblemsList.putExtra("Должность", user.child("position").getValue().toString());
+                                            startActivity(openUrgentProblemsList);
+                                        } else if (user.child("position").getValue().toString().equals("repair")) { //РЕМОНТНИК
+                                            Intent openUrgentProblemsList = new Intent(getApplicationContext(), QuestListOfEquipment.class);
+                                            openUrgentProblemsList.putExtra("Логин пользователя", login);
+                                            openUrgentProblemsList.putExtra("Должность", user.child("position").getValue().toString());
+                                            startActivity(openUrgentProblemsList);
+                                        } else if (user.child("position").getValue().toString().equals("raw") || user.child("position").getValue().toString().equals("quality")) { //ОТК / СЫРЬЕ
+                                            Intent openUrgentProblemsList = new Intent(getApplicationContext(), UrgentProblemsList.class);
+                                            openUrgentProblemsList.putExtra("Логин пользователя", login);
+                                            openUrgentProblemsList.putExtra("Должность", user.child("position").getValue().toString());
+                                            startActivity(openUrgentProblemsList);
+                                        } else if (user.child("position").getValue().toString().equals("head")) {
+                                            Intent openTodayChecks = new Intent(getApplicationContext(), TodayChecks.class);
+                                            openTodayChecks.putExtra("Логин пользователя", login);
+                                            openTodayChecks.putExtra("Должность", user.child("position").getValue().toString());
+                                            startActivity(openTodayChecks);
+                                        }
+
                                         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                         SharedPreferences.Editor editor = sharedPrefs.edit();
                                         editor.putString("Логин пользователя", login);
                                         editor.putString("Должность", user.child("position").getValue().toString());
                                         editor.commit(); //запиши данные в sharedPref
-                                    }
 
-                                    if(!user.child("position").getValue().toString().equals("head")) {
-                                        //если это любой специалист, кроме ГЛАВНЫХ, включи фоновый сервис слежения за появлением проблем (срочный и ТО), вызовов
-                                        //при появлении проблемы, будет отправлять уведомление
-                                        stopService(new Intent(getBaseContext(), BackgroundService.class)); //если до этого уже сервис для другого аккаунта был включен и произошел повторный логин
-                                        Intent startBackgroundService = new Intent(getApplicationContext(), BackgroundService.class);
-                                        startBackgroundService.putExtra("Должность", user.child("position").getValue().toString()); //уведомления сортируются в зависимости от должности и логина пользователя
-                                        startBackgroundService.putExtra("Логин пользователя", user.getKey());
-                                        ContextCompat.startForegroundService(getApplicationContext(), startBackgroundService);//эта функция запускает фоновый сервис
-                                        startService(new Intent(getApplicationContext(), AppLifecycleTrackerService.class));
-                                        finish();
+                                        if (!user.child("position").getValue().toString().equals("head")) {
+                                            //если это любой специалист, кроме ГЛАВНЫХ, включи фоновый сервис слежения за появлением проблем (срочный и ТО), вызовов
+                                            //при появлении проблемы, будет отправлять уведомление
+                                            stopService(new Intent(getBaseContext(), BackgroundService.class)); //если до этого уже сервис для другого аккаунта был включен и произошел повторный логин
+                                            Intent startBackgroundService = new Intent(getApplicationContext(), BackgroundService.class);
+                                            startBackgroundService.putExtra("Должность", user.child("position").getValue().toString()); //уведомления сортируются в зависимости от должности и логина пользователя
+                                            startBackgroundService.putExtra("Логин пользователя", user.getKey());
+                                            ContextCompat.startForegroundService(getApplicationContext(), startBackgroundService);//эта функция запускает фоновый сервис
+                                            startService(new Intent(getApplicationContext(), AppLifecycleTrackerService.class));
+                                            finish();
+                                        }
                                     }
+                                    else
+                                    { Toast.makeText(getApplicationContext(), "Выйдите из аккаунта на другом устройстве", Toast.LENGTH_LONG).show(); }
                                 }
                                 else { Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_LONG).show(); }
                             }
@@ -138,6 +143,5 @@ public class Login extends AppCompatActivity {
         enter = findViewById(R.id.enter);
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.INVISIBLE);
-        rememberMe = findViewById(R.id.remember_me);
     }
 }
